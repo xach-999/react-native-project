@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { RefreshControl, StyleSheet, Text, View } from "react-native";
 import { useDispatch } from "../../../../state/store";
 import HomeScreenHeader from "./components/HomeScreenHeader";
 import Constants from "expo-constants";
 import { ScrollView } from "react-native-virtualized-view";
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { getCategories } from "../../../../state/CategoriesSlice/CategoriesSlice";
 import InputSection from "./components/InputSection";
 import SpecialOffersCategories from "./components/SpecialOffersCategories";
@@ -17,9 +17,16 @@ export default function Home(props: any) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { eerieBlueOrWhite, whiteOrBlack } = useContext(themeContext);
+  const [refreshLoading, setRefreshLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getCategories());
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshLoading(true);
+    await dispatch(getCategories());
+    setRefreshLoading(false);
   }, []);
 
   return (
@@ -28,7 +35,12 @@ export default function Home(props: any) {
         <HomeScreenHeader />
         <InputSection navigation={navigation} />
       </View>
-      <ScrollView style={styles.scroll_part}>
+      <ScrollView
+        style={styles.scroll_part}
+        refreshControl={
+          <RefreshControl refreshing={refreshLoading} onRefresh={onRefresh} />
+        }
+      >
         <View>
           <View style={styles.header_part}>
             <Text
