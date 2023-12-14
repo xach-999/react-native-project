@@ -1,88 +1,43 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { errorCase, pendingCase } from '../storeHelpers';
-import ProductsService from '../../services/products.service';
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface initialStateTypes {
-  loading: boolean;
-  filteredProducts: any,
-  sortAndFilterForm: any,
-  searchTitle: any,
-  productMinPrice: number,
-  productMaxPrice: number,
+  filterParams: any;
+  productMinPrice: number;
+  productMaxPrice: number;
 }
 
 const initialState: initialStateTypes = {
-  loading: false,
-  filteredProducts: [],
-  searchTitle: '',
-  sortAndFilterForm: {
-    categoryId: '',
+  filterParams: {
+    categoryId: "",
     price_min: 0,
-    price_max: 0
+    price_max: 0,
   },
   productMinPrice: 0,
   productMaxPrice: 0,
-}
-
-export const getFilteredProducts = createAsyncThunk(
-  "filterSlice/getFilteredProducts",
-  async (text: any, { getState }) => {
-    try {
-      const { filterSlice }: any = getState();
-      const { searchTitle, sortAndFilterForm } = filterSlice;
-      const { categoryId, price_min, price_max } = sortAndFilterForm;
-      const title = text || searchTitle;
-      let query = '?';
-      if (title) query += `title=${title}&`;
-      query += `price_min=${price_min}&price_max=${price_max}`;
-      if (categoryId) query += `&categoryId=${categoryId}`;
-      const res = await ProductsService.getFilteredProducts(query);
-      return res.data;
-    } catch (err) {
-      console.log(err);
-      return;
-    }
-  }
-);
+};
 
 export const filterSlice = createSlice({
-  name: 'filterSlice',
+  name: "filterSlice",
   initialState,
   reducers: {
-    setSearchTitle: (state, action) => {
-      state.searchTitle = action.payload;
-    },
-    setSortAndFilterForm: (state, action) => {
-      state.sortAndFilterForm.categoryId = action.payload?.categoryId || '';
-      state.sortAndFilterForm.price_min = action.payload?.price_min || 0;
-      state.sortAndFilterForm.price_max = action.payload?.price_max || 0;
+    setFilterParams: (state, action) => {
+      state.filterParams.categoryId = action.payload?.categoryId || "";
+      state.filterParams.price_min = action.payload?.price_min || 0;
+      state.filterParams.price_max = action.payload?.price_max || 0;
     },
     setMinMaxPrices: (state, action) => {
-      state.productMinPrice = action.payload.min;
-      state.productMaxPrice = action.payload.max;
+      state.productMinPrice = action.payload.min || 0;
+      state.productMaxPrice = action.payload.max || 0;
+      state.filterParams.price_max = action.payload.max || 0;
+      state.filterParams.price_min = action.payload.min || 0;
     },
-    resetSortAndFilterForm: (state) => {
-      state.sortAndFilterForm = initialState.sortAndFilterForm;
+    resetFilterParams: (state) => {
+      state.filterParams = initialState.filterParams;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(getFilteredProducts.pending, pendingCase)
-    builder
-      .addCase(getFilteredProducts.rejected, errorCase)
-    builder
-      .addCase(getFilteredProducts.fulfilled, (state, action) => {
-        state.filteredProducts = action.payload || {};
-        state.loading = false;
-      })
-  }
-})
+});
 
-export const {
-  setSearchTitle,
-  resetSortAndFilterForm,
-  setSortAndFilterForm,
-  setMinMaxPrices
-} = filterSlice.actions;
+export const { resetFilterParams, setFilterParams, setMinMaxPrices } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;

@@ -8,29 +8,31 @@ import RatingList from "./components/RatingList";
 import { globalStyles } from "../../content/style";
 import { useDispatch, useSelector } from "../../state/store";
 import {
-  getFilteredProducts,
-  resetSortAndFilterForm,
-  setSortAndFilterForm,
+  resetFilterParams,
+  setFilterParams,
 } from "../../state/FilterSlice/FilterSlice";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
+import { useRoute } from "@react-navigation/native";
 
 export default function FilterScreen({ navigation }: any) {
+  const route = useRoute();
+  const { searchProducts }: any = route.params;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { sGrayOrLGray, whiteOrBlack, eerieBlueOrWhite } =
     useContext(themeContext);
 
-  const { sortAndFilterForm, productMinPrice, productMaxPrice } = useSelector(
+  const { filterParams, productMinPrice, productMaxPrice } = useSelector(
     (state) => state.filterSlice
   );
 
   const [categoryId, setCategoryId] = useState(
-    sortAndFilterForm.categoryId || ""
+    filterParams.categoryId || ""
   );
   const [rangeData, setRangeData] = useState<any>([
-    sortAndFilterForm.price_min || productMinPrice,
-    sortAndFilterForm.price_max || productMaxPrice,
+    filterParams.price_min || productMinPrice,
+    filterParams.price_max || productMaxPrice,
   ]);
 
   const onTouchBlackPart = useCallback(() => {
@@ -40,7 +42,7 @@ export default function FilterScreen({ navigation }: any) {
   const onPressReset = useCallback(() => {
     setCategoryId("");
     setRangeData([productMinPrice, productMaxPrice]);
-    dispatch(resetSortAndFilterForm());
+    dispatch(resetFilterParams());
   }, []);
 
   const onPressApply = useCallback(() => {
@@ -49,8 +51,8 @@ export default function FilterScreen({ navigation }: any) {
       price_max: rangeData[1],
       categoryId,
     };
-    dispatch(setSortAndFilterForm(date));
-    dispatch(getFilteredProducts(""));
+    dispatch(setFilterParams(date));
+    searchProducts("", date)
     onTouchBlackPart();
   }, [rangeData, categoryId]);
 

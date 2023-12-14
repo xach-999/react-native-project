@@ -26,8 +26,8 @@ const PriceRangeSlider = ({ rangeData, setRangeData }: any) => {
         values={[rangeData[0], rangeData[1]]}
         sliderLength={width - 40}
         onValuesChange={setRangeData}
-        // min={productMinPrice}
-        // max={productMaxPrice}
+        min={productMinPrice}
+        max={productMaxPrice}
         step={1}
         markerStyle={{
           ...styles.marker,

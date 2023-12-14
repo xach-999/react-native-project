@@ -4,28 +4,28 @@ import { Ionicons } from "@expo/vector-icons";
 import MyInput from "../../../components/MyInput";
 import { AntDesign } from "@expo/vector-icons";
 import Constants from "expo-constants";
-import { useDispatch } from "../../../state/store";
-import { setSearchTitle } from "../../../state/FilterSlice/FilterSlice";
 import themeContext from "../../../context/themeContext";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "../../../state/store";
+import { resetFilterParams } from "../../../state/FilterSlice/FilterSlice";
 
 interface HeaderSectionProps {
   navigation: any;
   setInputActive: (active: boolean) => void;
-  onSubmitEditing: any;
   setSearch: any;
   search: any;
   retrieveRecentSearches: any;
+  searchProducts: any;
 }
 
 const HeaderSection = (props: HeaderSectionProps) => {
   const {
     navigation,
     setInputActive,
-    onSubmitEditing,
     setSearch,
     search,
     retrieveRecentSearches,
+    searchProducts,
   } = props;
 
   const dispatch = useDispatch();
@@ -37,11 +37,11 @@ const HeaderSection = (props: HeaderSectionProps) => {
   };
 
   const clickRightIcon = () => {
-    dispatch(setSearchTitle(search));
-    navigation.navigate("Filter");
+    navigation.navigate("Filter", { searchProducts });
   };
 
   const goBack = () => {
+    dispatch(resetFilterParams());
     navigation?.goBack();
   };
 
@@ -57,7 +57,7 @@ const HeaderSection = (props: HeaderSectionProps) => {
           clickRightIcon={clickRightIcon}
           inputProps={{
             placeholder: t("Search"),
-            onSubmitEditing: () => onSubmitEditing(),
+            onSubmitEditing: () => searchProducts(),
             onFocus: () => {
               setInputActive(true);
               retrieveRecentSearches();
