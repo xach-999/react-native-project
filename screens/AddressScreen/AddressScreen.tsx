@@ -1,20 +1,74 @@
 import { TouchableOpacity, View, StyleSheet } from "react-native";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { Text } from "react-native";
 import MyInput from "../../components/MyInput";
 import { FontAwesome5 } from "@expo/vector-icons";
 import MyCheckbox from "../../components/Checkbox";
 import MyButton from "../../components/MyButton";
 import { useTranslation } from "react-i18next";
-import { useContext } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import themeContext from "../../context/themeContext";
-import colors from "../../styles/colors";
+import * as Location from "expo-location";
 
 const AddressScreen = ({ navigation }: any) => {
   const { t } = useTranslation();
-  const { eerieBlueOrWhite, whiteOrBlack } = useContext(themeContext);
+  const { isDark, eerieBlueOrWhite, whiteOrBlack } = useContext(themeContext);
+  const [location, setLocation] = useState<any>(null);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+      }
+    })();
+  }, []);
+
+  const mapCustomStyle = useMemo(
+    () => [
+      {
+        elementType: "geometry",
+        stylers: [{ color: isDark ? "#1f222a" : "#e7e7e7" }],
+      },
+      {
+        elementType: "labels.text.fill",
+        stylers: [{ color: isDark ? "#8c8c8c" : "#ffffff" }],
+      },
+      {
+        elementType: "labels.text.stroke",
+        stylers: [{ color: "#1a1a1a" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "geometry",
+        stylers: [{ color: isDark ? "#425445" : "#addbb5" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "labels.text.fill",
+        stylers: [{ color: isDark ? "#425445" : "#addbb5" }],
+      },
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ color: isDark ? "#35383f" : "#ffffff" }],
+      },
+      {
+        featureType: "transit",
+        elementType: "geometry",
+        stylers: [{ color: "#2f3948" }],
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: isDark ? "#364358" : "#9cc3ff" }],
+      },
+    ],
+    [isDark]
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: eerieBlueOrWhite }]}>
@@ -33,13 +87,23 @@ const AddressScreen = ({ navigation }: any) => {
       />
       <MapView
         style={styles.map}
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
+        customMapStyle={mapCustomStyle}
+        region={{
+          latitude: location?.coords.latitude || 37.78825,
+          longitude: location?.coords.longitude || -122.4324,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      />
+      >
+        {location && (
+          <Marker
+            coordinate={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+          />
+        )}
+      </MapView>
       <View style={[styles.content, { backgroundColor: eerieBlueOrWhite }]}>
         <Text
           style={[
