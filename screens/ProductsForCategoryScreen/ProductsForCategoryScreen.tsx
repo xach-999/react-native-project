@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { RefreshControl, View } from "react-native";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
 import { useRoute } from "@react-navigation/native";
-import ProductsService from "../../services/products.service";
+import ProductsService from "../../api/service/products.service";
 import Products from "../../components/Products";
 import Loading from "../../components/Loading";
 import themeContext from "../../context/themeContext";
@@ -32,8 +32,8 @@ export default function ProductsForCategoryScreen(props: any) {
       query += `?categoryId=${id}`;
     }
     ProductsService.getFilteredProducts(query)
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.log(err))
+      .then((res: any) => setProducts(res.data))
+      .catch((err: any) => console.log(err))
       .finally(() => {
         setLoading(false);
         setRefreshLoading(false);

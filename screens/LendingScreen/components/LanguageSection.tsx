@@ -8,8 +8,8 @@ import {
   changeActiveLanguage,
   changeActiveLanguageFromStorage,
 } from "../../../helpers/helpers";
-import { defaultLanguages } from "../../../data/data";
-import colors from "../../../styles/colors";
+import { defaultLanguages } from "../../../constants/data/data";
+import colors from "../../../content/colors";
 
 const LanguageSection = () => {
   const { i18n } = useTranslation();

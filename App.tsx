@@ -1,11 +1,11 @@
-import { store } from "./state/store";
+import { store } from "./features/store";
 import { Provider } from "react-redux";
 import Navigation from "./navigation/Navigation";
 import { useEffect, useState } from "react";
 import { db } from "./db/db";
-import i18n from "./i18n";
+import i18n from "./constants/i18n";
 import themeContext from "./context/themeContext";
-import colors from "./styles/colors";
+import colors from "./content/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {

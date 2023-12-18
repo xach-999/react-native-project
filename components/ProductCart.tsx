@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Image, Text } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import themeContext from "../context/themeContext";
-import colors from "../styles/colors";
+import colors from "../content/colors";
 
 export default function ProductCart(props: any) {
   const { product, onPressProduct } = props;

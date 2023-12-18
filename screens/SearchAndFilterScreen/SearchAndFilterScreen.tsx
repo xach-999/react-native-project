@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import { View, Text, StyleSheet, RefreshControl } from "react-native";
-import { useSelector } from "../../state/store";
+import { useSelector } from "../../features/store";
 import HeaderSection from "./components/HeaderSection";
 import Products from "../../components/Products";
 import RecentSearches from "./components/RecentSearches";
@@ -10,7 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Loading from "../../components/Loading";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
-import ProductsService from "../../services/products.service";
+import ProductsService from "../../api/service/products.service";
 
 interface SearchAndFilterScreenProps {
   navigation: any;
@@ -92,8 +92,8 @@ export default function SearchAndFilterScreen({
 
     saveRecentSearches(title);
     ProductsService.getFilteredProducts(query)
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.log(err))
+      .then((res: any) => setProducts(res.data))
+      .catch((err: any) => console.log(err))
       .finally(() => {
         setLoading(false);
         setRefreshLoading(false);

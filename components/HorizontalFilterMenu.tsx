@@ -1,7 +1,7 @@
 import { memo, useContext } from "react";
 import { FlatList, Text, TouchableOpacity, StyleSheet } from "react-native";
 import themeContext from "../context/themeContext";
-import colors from "../styles/colors";
+import colors from "../content/colors";
 
 const HorizontalFilterMenu = ({
   list,

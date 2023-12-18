@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 import themeContext from "../../../context/themeContext";
-import colors from "../../../styles/colors";
 
 export default function SizeSection() {
   const { t } = useTranslation();

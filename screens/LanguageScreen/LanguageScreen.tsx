@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
 import { useContext, useEffect, useState } from "react";
-import MyRadio from "../../components/MyRadio";
-import { defaultLanguages } from "../../data/data";
+import MyRadio from "../../ui/MyRadio";
+import { defaultLanguages } from "../../constants/data/data";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
 import {

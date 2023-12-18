@@ -2,10 +2,10 @@ import { FlatList, StyleSheet, View } from "react-native";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
 import { useContext, useState } from "react";
 import { Text } from "react-native";
-import { notificationListDefault } from "../../data/data";
+import { notificationListDefault } from "../../constants/data/data";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
-import MySwitch from "../../components/MySwitch";
+import MySwitch from "../../ui/MySwitch";
 
 const NotificationScreen = ({ navigation }: any) => {
   const { t } = useTranslation();

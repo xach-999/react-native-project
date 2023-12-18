@@ -1,16 +1,15 @@
 import React, { useState, useCallback, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import MyButton from "../../components/MyButton";
+import MyButton from "../../ui/MyButton";
 import CategoryList from "./components/CategoryList";
 import PriceRangeSlider from "./components/PriceRangeSlider";
 import SortByList from "./components/SortByList";
 import RatingList from "./components/RatingList";
-import { globalStyles } from "../../content/style";
-import { useDispatch, useSelector } from "../../state/store";
+import { useDispatch, useSelector } from "../../features/store";
 import {
   resetFilterParams,
   setFilterParams,
-} from "../../state/FilterSlice/FilterSlice";
+} from "../../features/FilterSlice/FilterSlice";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
 import { useRoute } from "@react-navigation/native";
@@ -27,9 +26,7 @@ export default function FilterScreen({ navigation }: any) {
     (state) => state.filterSlice
   );
 
-  const [categoryId, setCategoryId] = useState(
-    filterParams.categoryId || ""
-  );
+  const [categoryId, setCategoryId] = useState(filterParams.categoryId || "");
   const [rangeData, setRangeData] = useState<any>([
     filterParams.price_min || productMinPrice,
     filterParams.price_max || productMaxPrice,
@@ -52,7 +49,7 @@ export default function FilterScreen({ navigation }: any) {
       categoryId,
     };
     dispatch(setFilterParams(date));
-    searchProducts("", date)
+    searchProducts("", date);
     onTouchBlackPart();
   }, [rangeData, categoryId]);
 
@@ -72,22 +69,22 @@ export default function FilterScreen({ navigation }: any) {
           {t("Sort & Filter")}
         </Text>
         <View>
-          <Text style={[globalStyles.subHeader, { color: whiteOrBlack }]}>
+          <Text style={[styles.subHeader, { color: whiteOrBlack }]}>
             {t("Categories")}
           </Text>
           <CategoryList categoryId={categoryId} setCategoryId={setCategoryId} />
 
-          <Text style={[globalStyles.subHeader, { color: whiteOrBlack }]}>
+          <Text style={[styles.subHeader, { color: whiteOrBlack }]}>
             {t("Price Range")}
           </Text>
           <PriceRangeSlider rangeData={rangeData} setRangeData={setRangeData} />
 
-          <Text style={[globalStyles.subHeader, { color: whiteOrBlack }]}>
+          <Text style={[styles.subHeader, { color: whiteOrBlack }]}>
             {t("Sort by")}
           </Text>
           <SortByList />
 
-          <Text style={[globalStyles.subHeader, { color: whiteOrBlack }]}>
+          <Text style={[styles.subHeader, { color: whiteOrBlack }]}>
             {t("Rating")}
           </Text>
           <RatingList />
@@ -133,6 +130,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: 20,
     marginHorizontal: 20,
+  },
+  subHeader: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
+    fontWeight: "500",
+    fontSize: 18,
   },
   buttonContainer: {
     paddingTop: 20,

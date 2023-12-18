@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-virtualized-view";
-import { paymentCards } from "../../data/data";
+import { paymentCards } from "../../constants/data/data";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
-import MyButton from "../../components/MyButton";
+import MyButton from "../../ui/MyButton";
 
 const PaymentScreen = ({ navigation }: any) => {
   const { t } = useTranslation();

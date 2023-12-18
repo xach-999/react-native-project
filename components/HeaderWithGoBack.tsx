@@ -5,7 +5,6 @@ import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import Constants from "expo-constants";
 import { useContext } from "react";
 import themeContext from "../context/themeContext";
-import colors from "../styles/colors";
 
 interface PropsType {
   navigation?: NavigationProp<ParamListBase>;

@@ -1,23 +1,23 @@
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import MyButton from "../../components/MyButton";
+import MyButton from "../../ui/MyButton";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
-import MyInput from "../../components/MyInput";
+import MyInput from "../../ui/MyInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TextWithLine from "../../components/TextWithLine";
-import { socials } from "../../data/data";
+import { socials } from "../../constants/data/data";
 import HaveAnAccount from "../../components/HaveAnAccount";
-import Checkbox from "../../components/Checkbox";
+import Checkbox from "../../ui/Checkbox";
 import { FontAwesome } from "@expo/vector-icons";
 import * as yup from "yup";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { Formik } from "formik";
 import { useContext, useState } from "react";
 import themeContext from "../../context/themeContext";
-import colors from "../../styles/colors";
+import colors from "../../content/colors";
 import { useTranslation } from "react-i18next";
-import RegisterService from "../../services/register.service";
+import RegisterService from "../../api/service/register.service";
 
 interface PropsType {
   navigation: NavigationProp<ParamListBase>;
@@ -65,7 +65,7 @@ export default function SignUpScreen(props: PropsType) {
     setLoading(true);
     RegisterService.registerUser(data)
       .then(() => navigation.navigate("Sign In"))
-      .catch((err) => console.log(err))
+      .catch((err: any) => console.log(err))
       .finally(() => setLoading(false));
   };
 

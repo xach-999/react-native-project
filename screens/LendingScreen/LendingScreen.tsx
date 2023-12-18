@@ -1,10 +1,10 @@
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
 import { ScrollView } from "react-native-virtualized-view";
-import MyButton from "../../components/MyButton";
+import MyButton from "../../ui/MyButton";
 import TextWithLine from "../../components/TextWithLine";
 import HaveAnAccount from "../../components/HaveAnAccount";
-import { socials } from "../../data/data";
+import { socials } from "../../constants/data/data";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { useContext } from "react";
 import themeContext from "../../context/themeContext";

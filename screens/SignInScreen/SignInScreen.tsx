@@ -1,24 +1,24 @@
 import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import MyButton from "../../components/MyButton";
+import MyButton from "../../ui/MyButton";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
-import MyInput from "../../components/MyInput";
+import MyInput from "../../ui/MyInput";
 import { MaterialIcons } from "@expo/vector-icons";
 import TextWithLine from "../../components/TextWithLine";
 import HaveAnAccount from "../../components/HaveAnAccount";
-import { socials } from "../../data/data";
-import Checkbox from "../../components/Checkbox";
-import { useDispatch } from "../../state/store";
+import { socials } from "../../constants/data/data";
+import Checkbox from "../../ui/Checkbox";
+import { useDispatch } from "../../features/store";
 import * as yup from "yup";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { Formik } from "formik";
 import { useContext, useState } from "react";
 import themeContext from "../../context/themeContext";
-import colors from "../../styles/colors";
+import colors from "../../content/colors";
 import { useTranslation } from "react-i18next";
-import LoginService from "../../services/login.service";
+import LoginService from "../../api/service/login.service";
 import { database } from "../../db/db";
-import { getAuthorizedUser } from "../../state/UserSlice/UserSlice";
+import { getAuthorizedUser } from "../../features/UserSlice/UserSlice";
 
 interface PropsType {
   navigation: NavigationProp<ParamListBase>;
@@ -61,14 +61,14 @@ export default function SignInScreen(props: PropsType) {
     };
     setLoading(true)
     LoginService.loginUser(body)
-      .then(async (res) => {
+      .then(async (res: any) => {
         await database(
           "INSERT INTO token (refresh_token, access_token) VALUES (?, ?);",
           [res.data.refresh_token, res.data.access_token]
         );
         dispatch(getAuthorizedUser());
       })
-      .catch((err) => console.log(err))
+      .catch((err: any) => console.log(err))
       .finally(() => setLoading(false));
   };
 

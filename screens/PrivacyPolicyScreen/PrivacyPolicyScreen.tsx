@@ -1,6 +1,6 @@
 import { View, FlatList, Text, StyleSheet } from "react-native";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
-import { PrivacyPolicyData } from "../../data/data";
+import { PrivacyPolicyData } from "../../constants/data/data";
 import { useTranslation } from "react-i18next";
 import { useContext } from "react";
 import themeContext from "../../context/themeContext";

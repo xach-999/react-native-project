@@ -1,12 +1,12 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
 import { useContext, useState } from "react";
-import { securityListDefault } from "../../data/data";
+import { securityListDefault } from "../../constants/data/data";
 import { Feather } from "@expo/vector-icons";
-import MyButton from "../../components/MyButton";
+import MyButton from "../../ui/MyButton";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
-import MySwitch from "../../components/MySwitch";
+import MySwitch from "../../ui/MySwitch";
 
 const SecurityScreen = ({ navigation }: any) => {
   const { t } = useTranslation();

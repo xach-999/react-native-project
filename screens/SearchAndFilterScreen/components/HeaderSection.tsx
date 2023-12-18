@@ -1,13 +1,13 @@
 import React, { memo, useContext } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import MyInput from "../../../components/MyInput";
+import MyInput from "../../../ui/MyInput";
 import { AntDesign } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import themeContext from "../../../context/themeContext";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "../../../state/store";
-import { resetFilterParams } from "../../../state/FilterSlice/FilterSlice";
+import { useDispatch } from "../../../features/store";
+import { resetFilterParams } from "../../../features/FilterSlice/FilterSlice";
 
 interface HeaderSectionProps {
   navigation: any;

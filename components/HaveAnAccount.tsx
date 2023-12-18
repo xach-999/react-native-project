@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native";
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
 import themeContext from "../context/themeContext";
-import colors from "../styles/colors";
+import colors from "../content/colors";
 import { useTranslation } from "react-i18next";
 
 interface PropsType {

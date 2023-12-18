@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../../context/themeContext";
-import colors from "../../../styles/colors";
+import colors from "../../../content/colors";
 
 interface RecentSearchesProps {
   recentSearches: string[];

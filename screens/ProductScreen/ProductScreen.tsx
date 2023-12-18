@@ -8,7 +8,7 @@ import ColorSection from "./components/ColorSection";
 import HeaderSection from "./components/HeaderSection";
 import QuantitySection from "./components/QuantitySection";
 import PriceSection from "./components/PriceSection";
-import ProductsService from "../../services/products.service";
+import ProductsService from "../../api/service/products.service";
 import Loading from "../../components/Loading";
 import DescriptionSection from "./components/DescriptionSection";
 import themeContext from "../../context/themeContext";
@@ -28,8 +28,8 @@ export default function ProductScreen(props: any) {
 
   const getProduct = () => {
     ProductsService.getProduct(id)
-      .then((res) => setProduct(res.data))
-      .catch((err) => console.log(err))
+      .then((res: any) => setProduct(res.data))
+      .catch((err: any) => console.log(err))
       .finally(() => setLoading(false));
   };
 

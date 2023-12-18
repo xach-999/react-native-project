@@ -1,12 +1,12 @@
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import HeaderWithGoBack from "../../components/HeaderWithGoBack";
-import MyButton from "../../components/MyButton";
+import MyButton from "../../ui/MyButton";
 import { useContext, useEffect, useState } from "react";
-import UserService from "../../services/user.service";
+import UserService from "../../api/service/user.service";
 import Loading from "../../components/Loading";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
-import colors from "../../styles/colors";
+import colors from "../../content/colors";
 
 const InviteFriendsScreen = ({ navigation }: any) => {
   const { t } = useTranslation();
@@ -21,8 +21,8 @@ const InviteFriendsScreen = ({ navigation }: any) => {
   const getUsers = () => {
     setLoading(true);
     UserService.getUsers()
-      .then((res) => setUsers(res.data))
-      .catch((err) => console.log(err))
+      .then((res: any) => setUsers(res.data))
+      .catch((err: any) => console.log(err))
       .finally(() => setLoading(false));
   };
 

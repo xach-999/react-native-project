@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../../context/themeContext";
-import colors from "../../../styles/colors";
+import colors from "../../../content/colors";
 
 export default function ColorSection() {
   const { t } = useTranslation();

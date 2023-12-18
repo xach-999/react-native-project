@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import MyButton from "../../../components/MyButton";
+import MyButton from "../../../ui/MyButton";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import colors from "../../../styles/colors";
+import colors from "../../../content/colors";
 import themeContext from "../../../context/themeContext";
 
 export default function PriceSection({ price }: any) {

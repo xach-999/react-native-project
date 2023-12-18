@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { useSelector } from '../../../state/store';
+import { useSelector } from '../../../features/store';
 import HorizontalFilterMenu from '../../../components/HorizontalFilterMenu';
 
 const CategoryList = ({categoryId, setCategoryId}: any) => {

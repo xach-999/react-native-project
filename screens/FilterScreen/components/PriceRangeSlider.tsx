@@ -1,7 +1,7 @@
 import React, { memo, useContext } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
-import { useSelector } from "../../../state/store";
+import { useSelector } from "../../../features/store";
 import themeContext from "../../../context/themeContext";
 
 const width = Dimensions.get("window").width;
