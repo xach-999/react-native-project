@@ -16,6 +16,7 @@ interface HeaderSectionProps {
   search: any;
   retrieveRecentSearches: any;
   searchProducts: any;
+  openFilterModal: any;
 }
 
 const HeaderSection = (props: HeaderSectionProps) => {
@@ -26,6 +27,7 @@ const HeaderSection = (props: HeaderSectionProps) => {
     search,
     retrieveRecentSearches,
     searchProducts,
+    openFilterModal
   } = props;
 
   const dispatch = useDispatch();
@@ -37,7 +39,7 @@ const HeaderSection = (props: HeaderSectionProps) => {
   };
 
   const clickRightIcon = () => {
-    navigation.navigate("Filter", { searchProducts });
+    if(search) openFilterModal();
   };
 
   const goBack = () => {

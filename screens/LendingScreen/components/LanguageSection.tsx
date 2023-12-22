@@ -39,9 +39,6 @@ const LanguageSection = () => {
         style={styles.languageButton}
       >
         <View style={styles.languageContainer}>
-          {/* <Text style={[styles.languageText, { color: whiteOrBlack }]}>
-            {activeLanguage?.value.toUpperCase()}
-          </Text> */}
           <CountryFlag
             size={14}
             isoCode={

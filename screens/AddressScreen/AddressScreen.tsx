@@ -8,14 +8,25 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import MyCheckbox from "../../ui/Checkbox";
 import MyButton from "../../ui/MyButton";
 import { useTranslation } from "react-i18next";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import themeContext from "../../context/themeContext";
 import * as Location from "expo-location";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import Constants from "expo-constants";
+import colors from "../../content/colors";
+
+const mapTypes = ["standard", "terrain", "satellite", "hybrid"];
 
 const AddressScreen = ({ navigation }: any) => {
   const { t } = useTranslation();
-  const { isDark, eerieBlueOrWhite, whiteOrBlack } = useContext(themeContext);
+  const { isDark, eerieBlueOrWhite, whiteOrBlack, sGrayOrLGray } =
+    useContext(themeContext);
   const [location, setLocation] = useState<any>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [mapType, setMapType] = useState<any>("standard");
+
+  const sheetRef = useRef<BottomSheet>(null);
+  const snapPoints = ["100%"];
 
   useEffect(() => {
     (async () => {
@@ -70,13 +81,23 @@ const AddressScreen = ({ navigation }: any) => {
     [isDark]
   );
 
+  const openMapModal = () => {
+    sheetRef.current?.snapToIndex(0);
+    setIsOpen(true);
+  };
+
+  const closeFilterModal = () => {
+    sheetRef.current?.close();
+    setIsOpen(false);
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: eerieBlueOrWhite }]}>
       <HeaderWithGoBack
         navigation={navigation}
         title={t("Add New Address")}
         rightIcon={
-          <TouchableOpacity>
+          <TouchableOpacity onPress={openMapModal}>
             <MaterialCommunityIcons
               name="dots-horizontal-circle-outline"
               size={26}
@@ -86,8 +107,11 @@ const AddressScreen = ({ navigation }: any) => {
         }
       />
       <MapView
+        mapType={mapType}
+        userInterfaceStyle={isDark ? "dark" : "light"}
         style={styles.map}
         customMapStyle={mapCustomStyle}
+        onPress={() => isOpen && closeFilterModal()}
         region={{
           latitude: location?.coords.latitude || 37.78825,
           longitude: location?.coords.longitude || -122.4324,
@@ -104,44 +128,94 @@ const AddressScreen = ({ navigation }: any) => {
           />
         )}
       </MapView>
-      <View style={[styles.content, { backgroundColor: eerieBlueOrWhite }]}>
-        <Text
-          style={[
-            styles.header,
-            { color: whiteOrBlack },
-            { borderColor: whiteOrBlack },
-          ]}
-        >
-          {t("Address Details")}
-        </Text>
-
-        <View style={styles.addressDetails}>
-          <View style={styles.inputContainer}>
-            <Text style={[styles.nameHeader, { color: whiteOrBlack }]}>
-              {t("Name Address")}
+      <View style={styles.mapTypeBottonsBlock}>
+        {mapTypes.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => setMapType(item)}
+            style={[
+              styles.mapTypeButton,
+              {
+                backgroundColor:
+                  mapType === item
+                    ? isDark
+                      ? colors.eerieBlue
+                      : colors.lightGray
+                    : isDark
+                    ? colors.slateGray
+                    : colors.white,
+              },
+            ]}
+          >
+            <Text
+              style={{
+                color: whiteOrBlack,
+                fontWeight: "500",
+              }}
+            >
+              {item}
             </Text>
-            <MyInput
-              inputProps={{ value: "Apartment" }}
-              style={styles.inputMarginTop}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={[styles.nameHeader, { color: whiteOrBlack }]}>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        onClose={() => setIsOpen(false)}
+        enableDynamicSizing={true}
+        backgroundStyle={{
+          backgroundColor: eerieBlueOrWhite,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+        }}
+      >
+        <BottomSheetView>
+          <View style={{ backgroundColor: eerieBlueOrWhite }}>
+            <Text
+              style={[
+                styles.header,
+                { color: whiteOrBlack },
+                { borderColor: whiteOrBlack },
+              ]}
+            >
               {t("Address Details")}
             </Text>
-            <MyInput
-              rightIcon={<FontAwesome5 name="map-marker-alt" />}
-              inputProps={{ value: "2899 Summer Drive Taylor, PC 48180" }}
-              style={styles.inputMarginTop}
-            />
+
+            <View style={styles.addressDetails}>
+              <View style={styles.inputContainer}>
+                <Text style={[styles.nameHeader, { color: whiteOrBlack }]}>
+                  {t("Name Address")}
+                </Text>
+                <MyInput
+                  inputProps={{ value: "Apartment" }}
+                  style={styles.inputMarginTop}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={[styles.nameHeader, { color: whiteOrBlack }]}>
+                  {t("Address Details")}
+                </Text>
+                <MyInput
+                  rightIcon={<FontAwesome5 name="map-marker-alt" />}
+                  inputProps={{ value: "2899 Summer Drive Taylor, PC 48180" }}
+                  style={styles.inputMarginTop}
+                />
+              </View>
+              <MyCheckbox
+                style={styles.checkbox}
+                text="Make this as the default address"
+              />
+              <View
+                style={[styles.buttonContainer, { borderColor: sGrayOrLGray }]}
+              >
+                <MyButton text="Add" style={{ flex: 1 }} />
+              </View>
+            </View>
           </View>
-          <MyCheckbox
-            style={styles.checkbox}
-            text="Make this as the default address"
-          />
-          <MyButton text="Add" />
-        </View>
-      </View>
+        </BottomSheetView>
+      </BottomSheet>
     </View>
   );
 };
@@ -151,22 +225,30 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    width: "100%",
     flex: 1,
   },
-  content: {
-    height: "55%",
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    marginTop: "-10%",
+  mapTypeBottonsBlock: {
+    padding: 3,
+    position: "absolute",
+    top: Constants.statusBarHeight + 64,
+    flexDirection: "row",
+  },
+  mapTypeButton: {
+    alignSelf: "center",
+    alignContent: "center",
+    paddingVertical: 8,
+    margin: 1,
+    borderRadius: 5,
+    width: 70,
+    alignItems: "center",
   },
   header: {
     textAlign: "center",
+    paddingTop: 5,
     paddingBottom: 20,
     fontSize: 22,
     fontWeight: "500",
     borderBottomWidth: 1,
-    paddingVertical: 20,
     marginHorizontal: 20,
   },
   addressDetails: {
@@ -186,6 +268,11 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     justifyContent: "flex-start",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 30,
   },
 });
 

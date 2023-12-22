@@ -12,7 +12,6 @@ import SecurityScreen from "../screens/SecurityScreen/SecurityScreen";
 import LanguageScreen from "../screens/LanguageScreen/LanguageScreen";
 import PrivacyPolicyScreen from "../screens/PrivacyPolicyScreen/PrivacyPolicyScreen";
 import InviteFriendsScreen from "../screens/InviteFriendsScreen/InviteFriendsScreen";
-import FilterScreen from "../screens/FilterScreen/FilterScreen";
 
 const Stack = createStackNavigator();
 
@@ -39,9 +38,6 @@ export default function AppNavigator() {
         <Stack.Screen name="Language" component={LanguageScreen} />
         <Stack.Screen name="Privacy Policy" component={PrivacyPolicyScreen} />
         <Stack.Screen name="Invite Friends" component={InviteFriendsScreen} />
-      </Stack.Group>
-      <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
-        <Stack.Screen name="Filter" component={FilterScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

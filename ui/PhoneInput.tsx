@@ -1,10 +1,12 @@
-import React, { memo, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import PhoneInput from "react-native-phone-input";
 import CountryPicker from "react-native-country-picker-modal";
 import colors from "../content/colors";
+import themeContext from "../context/themeContext";
 
 const PhoneCountryInput = () => {
+  const { isDark } = useContext(themeContext);
   const [phoneNumber, setPhoneNumber] = useState<any>("+37477777777");
   const [countryCode, setCountryCode] = useState<any>("AM");
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
@@ -27,7 +29,10 @@ const PhoneCountryInput = () => {
         defaultCode={countryCode}
         onChangePhoneNumber={(number) => setPhoneNumber(number)}
         onPressFlag={toggleCountryPicker}
-        style={styles.phoneInput}
+        style={[
+          styles.phoneInput,
+          { backgroundColor: isDark ? colors.darkBlue : colors.whiteSmoke },
+        ]}
       />
       {countryPickerVisible && (
         <CountryPicker

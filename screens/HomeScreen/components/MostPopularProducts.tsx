@@ -26,7 +26,7 @@ const MostPopularProducts = ({ navigation, selectedId }: any) => {
       const allProducts = [ ...res.data ];
       allProducts.sort((a: any, b: any) => a?.price - b?.price);
       const min = allProducts[0]?.price || 0;
-      const max = allProducts[allProducts.length - 3]?.price || 0;
+      const max = allProducts[allProducts.length - 1]?.price || 0;
       dispatch(setMinMaxPrices({min, max}))
       setProducts(res.data)
     })

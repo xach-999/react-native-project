@@ -1,8 +1,8 @@
 import React, { memo, useMemo, useState } from "react";
-import { View, TouchableOpacity, Platform } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { View, TouchableOpacity } from "react-native";
 import MyInput from "./MyInput";
 import { MaterialIcons } from "@expo/vector-icons";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const MyDatePicker = () => {
   const [date, setDate] = useState<any>(new Date("2020-08-17T11:15:30.000Z"));
@@ -18,19 +18,21 @@ const MyDatePicker = () => {
     return formatter.format(dateObject);
   }, [date]);
 
-  const onChange = (_: any, selectedDate: any) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
+  const handleConfirm = (date: any) => {
+    setDate(date)
   };
 
-  const showMode = () => {
+  const showDateSelect = () => {
     setShow(true);
+  };
+
+  const hideDateSelect = () => {
+    setShow(false);
   };
 
   return (
     <View>
-      <TouchableOpacity onPress={showMode}>
+      <TouchableOpacity onPress={showDateSelect}>
         <MyInput
           rightIcon={<MaterialIcons name="date-range" />}
           inputProps={{
@@ -38,20 +40,16 @@ const MyDatePicker = () => {
             type: "default",
             selectTextOnFocus: false,
             value: changedDate,
+            pointerEvents: "none",
           }}
         />
       </TouchableOpacity>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          timeZoneOffsetInMinutes={0}
-          value={date}
-          mode={"date"}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
+      <DateTimePickerModal
+        isVisible={show}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDateSelect}
+      />
     </View>
   );
 };

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -19,6 +18,7 @@ interface RecentSearchesProps {
   setRecentSearches: (searches: string[]) => void;
   searchProducts: any;
   setSearch: any;
+  closeKeyboard: any
 }
 
 const RecentSearches: React.FC<RecentSearchesProps> = ({
@@ -26,6 +26,7 @@ const RecentSearches: React.FC<RecentSearchesProps> = ({
   setRecentSearches,
   searchProducts,
   setSearch,
+  closeKeyboard
 }) => {
   const { t } = useTranslation();
   const { isDark, whiteOrBlack, sGrayOrLGray } = useContext(themeContext);
@@ -55,12 +56,8 @@ const RecentSearches: React.FC<RecentSearchesProps> = ({
 
   const selectSearchedText = (text: string) => {
     setSearch(text);
-    searchProducts(text);
+    searchProducts({text});
     closeKeyboard();
-  };
-
-  const closeKeyboard = () => {
-    Keyboard.dismiss();
   };
 
   return (

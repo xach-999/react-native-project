@@ -82,5 +82,8 @@
   "or continue with": "կամ շարունակել",
   "Create your Account": "Ստեղծեք ձեր հաշիվը",
   "Name": "Անուն",
-  "Already have an account?": "Արդեն ունեք հաշիվ?"
+  "Already have an account?": "Արդեն ունեք հաշիվ?",
+  "Card Name": "Քարտի անվանումը",
+  "Card Number": "Քարտի համար",
+  "Expiry Date": "Ժամկետ"
 }

@@ -1,5 +1,18 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
-import { View, Text, StyleSheet, RefreshControl } from "react-native";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  RefreshControl,
+  Keyboard,
+  TouchableOpacity,
+} from "react-native";
 import { useSelector } from "../../features/store";
 import HeaderSection from "./components/HeaderSection";
 import Products from "../../components/Products";
@@ -11,6 +24,8 @@ import Loading from "../../components/Loading";
 import { useTranslation } from "react-i18next";
 import themeContext from "../../context/themeContext";
 import ProductsService from "../../api/service/products.service";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import FilterModal from "./components/FiltersModal";
 
 interface SearchAndFilterScreenProps {
   navigation: any;
@@ -21,7 +36,9 @@ export default function SearchAndFilterScreen({
 }: SearchAndFilterScreenProps) {
   const { t } = useTranslation();
   const { eerieBlueOrWhite, whiteOrBlack } = useContext(themeContext);
-  const { filterParams } = useSelector((state) => state.filterSlice);
+  const { productMinPrice, productMaxPrice } = useSelector(
+    (state) => state.filterSlice
+  );
 
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [inputActive, setInputActive] = useState<boolean>(true);
@@ -29,6 +46,15 @@ export default function SearchAndFilterScreen({
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshLoading, setRefreshLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [categoryId, setCategoryId] = useState("");
+  const [priceRange, setPriceRange] = useState([
+    productMinPrice,
+    productMaxPrice,
+  ]);
+
+  const sheetRef = useRef<BottomSheet>(null);
+  const snapPoints = ["100%"];
 
   useEffect(() => {
     setInputActive(false);
@@ -70,21 +96,25 @@ export default function SearchAndFilterScreen({
     }
   }, []);
 
-  const searchProducts = (text?: any, params?: any) => {
-    setLoading(true);
-    getProducts(text, params);
-  };
-
   const onRefresh = () => {
     setRefreshLoading(true);
-    getProducts();
+    getSearchedProducts();
   };
 
-  const getProducts = (text?: any, params?: any) => {
-    const title = text || search;
-    if (!title) return;
+  const searchProducts = (params?: any) => {
+    setLoading(true);
+    getSearchedProducts(params);
+  };
 
-    const { categoryId, price_min, price_max } = params || filterParams;
+  const getSearchedProducts = (params?: any) => {
+    const title = params?.text || search;
+    const price_min = params?.rangeData?.[0] || priceRange[0];
+    const price_max = params?.rangeData?.[1] || priceRange[1];
+
+    if (!title) return;
+    setIsOpen(false);
+    sheetRef.current?.close();
+
     let query = "?";
     if (title) query += `title=${title}&`;
     query += `price_min=${price_min}&price_max=${price_max}`;
@@ -100,56 +130,119 @@ export default function SearchAndFilterScreen({
       });
   };
 
-  return (
-    <View style={[styles.container, { backgroundColor: eerieBlueOrWhite }]}>
-      <HeaderSection
-        navigation={navigation}
-        setInputActive={setInputActive}
-        searchProducts={searchProducts}
-        setSearch={setSearch}
-        search={search}
-        retrieveRecentSearches={retrieveRecentSearches}
-      />
+  const onPressApply = (params: any) => {
+    setPriceRange(params.rangeData);
+    searchProducts(params);
+  };
 
-      {loading ? (
-        <Loading />
-      ) : inputActive ? (
-        <RecentSearches
-          recentSearches={recentSearches}
-          setRecentSearches={setRecentSearches}
+  const onPressReset = useCallback(() => {
+    setCategoryId("");
+    setPriceRange([productMinPrice, productMaxPrice]);
+  }, []);
+
+  const closeKeyboard = useCallback(() => {
+    Keyboard.dismiss();
+  }, []);
+
+  const openFilterModal = () => {
+    sheetRef.current?.snapToIndex(0);
+    setIsOpen(true);
+    closeKeyboard();
+  };
+
+  const closeFilterModal = () => {
+    sheetRef.current?.close();
+    setIsOpen(false);
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={[styles.container, { backgroundColor: eerieBlueOrWhite }]}>
+        {isOpen && (
+          <TouchableOpacity
+            onPress={closeFilterModal}
+            style={styles.filterBlackPart}
+          />
+        )}
+        <HeaderSection
+          navigation={navigation}
+          setInputActive={setInputActive}
           searchProducts={searchProducts}
           setSearch={setSearch}
+          search={search}
+          retrieveRecentSearches={retrieveRecentSearches}
+          openFilterModal={openFilterModal}
         />
-      ) : (
-        <View style={styles.resultContainer}>
-          <View style={styles.headerPart}>
-            <Text style={[styles.headerPartFirstText, { color: whiteOrBlack }]}>
-              {t("Results for")} "{search}"
-            </Text>
-            <Text
-              style={[styles.headerPartSecondText, { color: whiteOrBlack }]}
-            >
-              {products?.length} {t("found")}
-            </Text>
-          </View>
 
-          {!!products?.length ? (
-            <ScrollView
-              style={styles.results}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshLoading}
-                  onRefresh={onRefresh}
-                />
-              }
-            >
-              <Products products={products} navigation={navigation} />
-            </ScrollView>
-          ) : (
-            <NotFoundSection />
-          )}
-        </View>
-      )}
+        {loading ? (
+          <Loading />
+        ) : inputActive ? (
+          <RecentSearches
+            recentSearches={recentSearches}
+            setRecentSearches={setRecentSearches}
+            searchProducts={searchProducts}
+            setSearch={setSearch}
+            closeKeyboard={closeKeyboard}
+          />
+        ) : (
+          <View style={styles.resultContainer}>
+            <View style={styles.headerPart}>
+              <Text
+                style={[styles.headerPartFirstText, { color: whiteOrBlack }]}
+              >
+                {t("Results for")} "{search}"
+              </Text>
+              <Text
+                style={[styles.headerPartSecondText, { color: whiteOrBlack }]}
+              >
+                {products?.length} {t("found")}
+              </Text>
+            </View>
+
+            {!!products?.length ? (
+              <ScrollView
+                style={styles.results}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshLoading}
+                    onRefresh={onRefresh}
+                  />
+                }
+              >
+                <Products products={products} navigation={navigation} />
+              </ScrollView>
+            ) : (
+              <NotFoundSection />
+            )}
+          </View>
+        )}
+      </View>
+
+      <BottomSheet
+        ref={sheetRef}
+        index={-1}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        onClose={() => setIsOpen(false)}
+        enableDynamicSizing={true}
+        containerHeight={100}
+        detached={true}
+        backgroundStyle={{
+          backgroundColor: eerieBlueOrWhite,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+        }}
+      >
+        <BottomSheetView>
+          <FilterModal
+            priceRange={priceRange}
+            setCategoryId={setCategoryId}
+            categoryId={categoryId}
+            onPressReset={onPressReset}
+            onPressApply={onPressApply}
+          />
+        </BottomSheetView>
+      </BottomSheet>
     </View>
   );
 }
@@ -177,5 +270,13 @@ const styles = StyleSheet.create({
   },
   results: {
     flex: 1,
+  },
+  filterBlackPart: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    backgroundColor: "black",
+    opacity: 0.7,
+    zIndex: 2,
   },
 });

@@ -82,5 +82,8 @@
   "or continue with": "или продолжить с",
   "Create your Account": "Создать аккаунт",
   "Name": "Имя",
-  "Already have an account?": "У вас уже есть аккаунт?"
+  "Already have an account?": "У вас уже есть аккаунт?",
+  "Card Name": "Имя карты",
+  "Card Number": "Номер карты",
+  "Expiry Date": "Крайний срок"
 }

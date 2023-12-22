@@ -1,36 +1,32 @@
-import { StyleSheet } from "react-native";
-import { View } from "react-native";
-import React, { memo } from "react";
-import { Picker } from "@react-native-picker/picker";
+import React, { memo, useContext } from "react";
 import colors from "../content/colors";
+import SelectDropdown from "react-native-select-dropdown";
+import themeContext from "../context/themeContext";
 
 const MySelect = ({ options }: any) => {
+  const { isDark } = useContext(themeContext);
+
   return (
-    <View style={styles.container}>
-      <Picker
-        style={styles.picker}
-      >
-        {options?.map((option: any) => (
-          <Picker.Item
-            key={option.id}
-            label={option.title}
-            value={option.title}
-          />
-        ))}
-      </Picker>
-    </View>
+    <SelectDropdown
+      buttonTextStyle={{
+        textAlign: "left",
+        fontSize: 16,
+        color: isDark ? colors.white : colors.black,
+      }}
+      buttonStyle={{
+        backgroundColor: isDark ? colors.darkBlue : colors.whiteSmoke,
+        width: "100%",
+        borderRadius: 12,
+        height: 55,
+      }}
+      data={options}
+      onSelect={(selectedItem, index) => {
+        console.log(selectedItem, index);
+      }}
+      buttonTextAfterSelection={(selectedItem) => selectedItem}
+      rowTextForSelection={(item) => item}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.whiteSmoke,
-    borderRadius: 12,
-    height: 55,
-  },
-  picker: {
-    borderRadius: 12,
-  },
-});
 
 export default memo(MySelect);

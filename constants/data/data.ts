@@ -47,27 +47,9 @@ export const carouselData = [
   },
 ];
 
-export const locationOptions = [
-  {
-    id: 1,
-    title: "United States",
-  },
-  {
-    id: 2,
-    title: "Armenia",
-  },
-];
+export const locationOptions = ["United States", "Armenia"];
 
-export const genderOptions = [
-  {
-    id: 1,
-    title: "Male",
-  },
-  {
-    id: 2,
-    title: "Female",
-  },
-];
+export const genderOptions = ["Male", "Female"];
 
 export const notificationListDefault = [
   {
@@ -125,7 +107,7 @@ export const notificationListDefault = [
 export const PrivacyPolicyData = [
   {
     title: "1. Types of Data We Collect",
-    description: "lorem_ipsum_long"
+    description: "lorem_ipsum_long",
   },
   {
     title: "2. Use of Your Personal Data",
@@ -158,17 +140,17 @@ export const securityListDefault = [
 export const defaultLanguages = [
   {
     title: "English",
-    value: 'en',
+    value: "en",
     active: true,
   },
   {
     title: "Russian",
-    value: 'ru',
+    value: "ru",
     active: false,
   },
   {
     title: "Armenian",
-    value: 'am',
+    value: "am",
     active: false,
   },
 ];
